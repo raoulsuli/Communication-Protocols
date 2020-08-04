@@ -1,0 +1,21 @@
+#Sulimovici Raoul-Renatto 321CD	
+
+Pentru a parsa JSON m-am folosit de biblioteca parson din C. Am pornit implementarea inspirandu-ma din scheletul de la laboratorul 10. Fisierele helpers.c si buffer.c fiind date in arhiva lab10.
+In helpers, fata de cele 2 functii de compute_request date in laborator, am creat si una de delete dupa modelul celoralte doua. Acestea parseaza informatiile date si salveaza mesajul ca un char* dupa care il trimit la server.
+In request-uri se adauga de asemenea cookie-ul de sesiune si token-ul JWT.
+
+Comenzi:
+Mi-am alocat un string in care voi primi comanda, am declarat string-uri pentru mesaje si raspunsuri, un sockfd, un string pt host si un vector de string-uri pentru cookies(connect.sid si authorization).
+
+	register -> am alocat string-uri pentru user si parola, unde am salvat ce primesc la stdin. Am folosit JSON_Object si JSON_Value sa creez o ierarhie de obiecte json si am adaugat cu json_object_set_string campuri de tipul string
+in ierarhie. Am transformat ierarhia json intr-un string (cu serialize_to_string_pretty) si am parsat string-ul cu functia compute_post_request. Am trimis mesajul, am primit raspunsul si am afisat erorile/OK.
+	login -> Este la fel ca register, doar ca am salvat cookie-ul de sesiune in variabila cookies[0].
+	enter_library-> am facut get pe url-ul cerut, adaugand cookie-ul de sesiune. Am obtinut token-ul jwt si l-am salvat in cookies[1].
+	get_books->am facut get pe books si am filtrat doar lista de carti din raspuns.
+	get_book-> am concatenat la url id-ul primit ca parametru in comanda si am facut get pe acest url. Am afisat json-ul cartii cerute.
+	add_book-> Pentru add_book am tratat in cod singurele erori (celelalte fiind tratate de server si eu doar le-am afisat). Am citit string-uri pt toate campurile unei carti. Pentru page_count am verificat sa fie numar cu o functie auxiliara
+si am verificat sa nu fie negativ sau 0. Daca este afisez o eroare si cer sa se reintroduca page_count. Am verificat si pentru autor sa nu fie numar. Dupa care am creat o ierarhie json ca in cazul de la register, unde am adaugat 4 string-uri si un number
+cu functia json_object_set_number si am dat char* ul obtinut ca parametru pentru post. Am afisat raspunsul.
+	delete_book-> face o cerere de Delete pe ruta specifica. (concatenata cu id-ul din input).
+	logout-> va face get pe url-ul de logout si va reseta token-ul JWT pentru librarie.
+	exit -> va dezaloca campurile alocate si va iesi din rularea programului.
