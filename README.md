@@ -1,5 +1,5 @@
 # Communication Protocols
-## Faculty of Automatics and Computer Science Course (2019-2020)
+## Faculty of Automatics and Computer Science Course (2020)
 ### 2nd Year, 2nd Semester
 #### The repository contains three assignments:
 * A low-level packet-routing algorithm in C
